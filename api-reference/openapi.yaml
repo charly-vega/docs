@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: CreatorKit API
+  description: |
+    CreatorKit is a powerful tool to help automate the creation of UGC-style videos with AI. Use a website URL to generate a video automatically complete with a script and visuals extracted from the website's content. Or, provide a custom script with your own assets, choosing actors, and voices for greater control.
+  version: v1.0.0
+servers:
+  - url: https://api.creatorkit.com
+paths:
+  "/v1/ai-ads/videos/{id}":
+    get:
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      summary: Get Video
+      description: Fetch a video to query its current status and download links.
+      security:
+        - ckApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                      - pending
+                      - done
+                      - failed
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+  "/v1/ai-ads/videos":
+    post:
+      summary: Create Video
+      description: |
+        Submit a request to create a UGC-style video. Choose from 3 request formats:
+          - `video-from-url`: provide only a URL and we'll render a complete short video featuring the page's content.
+          - `video-from-text`: provide a text script together with optional content to feature in the final video.
+          - `video-from-spec`: most advanced, describe the entire video as a collection of scenes, with complete control over what actor to use, their voices, and other assets.
+      security:
+        - ckApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                      - pending
+                      - done
+                      - failed
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+      requestBody:
+        description: The details of the scenes to be included in the generated video.
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - "$ref": "#/components/schemas/video-from-spec"
+                - "$ref": "#/components/schemas/video-from-text"
+                - "$ref": "#/components/schemas/video-from-url"
+              ## via https://redocly.com/docs/resources/discriminator
+              ## but Mintlify doesn't seem to use it
+              # discriminator:
+              #   propertyName: type
+              #   mapping:
+              #     "video-from-spec": '#/components/schemas/video-from-spec'
+              #     "video-from-text": '#/components/schemas/video-from-text'
+              #     "video-from-url": '#/components/schemas/video-from-url'
+  
+components:
+  schemas:
+    input-actor:
+      type: object
+      properties:
+        id:
+          type: string
+        position:
+          type: string
+          nullable: true
+          description: The position of the actor in the scene (only for greenscreenActor).
+        voiceOverrideId:
+          type: string
+          nullable: true
+          description: The ID of the voice to be used for the speech (nullable if not provided).
+      required: [id]
+    create-video-requestBody:
+      type: object
+      required: [type]
+    video-from-url:
+      type: object
+      title: "video-from-url"
+      description: Create a video by specifying a webpage URL and have CreatorKit write the script for you.
+      allOf:
+        - "$ref": "#/components/schemas/create-video-requestBody"
+      properties:
+        type:
+          type: string
+          enum: ["video-from-url"]
+        url:
+          type: string
+        actor:
+          "$ref": "#/components/schemas/input-actor"
+      required: [url]
+    video-from-text:
+      type: object
+      title: "video-from-text"
+      description: Create a video by specifying a text script and other optional content.
+      allOf:
+        - "$ref": "#/components/schemas/create-video-requestBody"
+      properties:
+        type:
+          type: string
+          enum: ["video-from-text"]
+        script:
+          type: string
+        actor:
+          "$ref": "#/components/schemas/input-actor"
+      required: [url]
+    video-from-spec:
+      type: object
+      title: "video-from-spec"
+      description: Create a video by describing the its content as a collection of scenes (advanced).
+      allOf:
+        - "$ref": "#/components/schemas/create-video-requestBody"
+      properties:
+        type:
+          type: string
+          enum: ["video-from-spec"]
+        scenes:
+          type: array
+          items:
+            type: object
+            properties:
+              sceneType:
+                type: string
+                enum: [fullscreenActor, greenscreenActor, fullscreenMedia]
+              params:
+                type: object
+                properties:
+                  script:
+                    type: string
+                    description: The script for the actor or scene's speech.
+                  actor:
+                    "$ref": "#/components/schemas/input-actor"
+                  emotion:
+                    type: string
+                    description: The emotion that the actor should express (only for fullscreenActor).
+                  assets:
+                    type: object
+                    properties:
+                      backgroundUrl:
+                        type: string
+                        nullable: true
+                        description: The URL of the background video (only for greenscreenActor and fullscreenMedia).
+                      backgroundContentType:
+                        type: string
+                        nullable: true
+                        description: The content type (MIME type) of the background (only for greenscreenActor and fullscreenMedia).
+  securitySchemes:
+    ckApiKey:
+      type: apiKey
+      name: x-api-key
+      in: header

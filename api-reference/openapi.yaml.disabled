@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  title: CreatorKit API
+  description: |
+    CreatorKit is a powerful tool to help automate the creation of UGC-style videos with AI. Use a website URL to generate a video automatically complete with a script and visuals extracted from the website's content. Or, provide a custom script with your own assets, choosing actors, and voices for greater control.
+  version: v1.0.0
+servers:
+  - url: https://api.creatorkit.com
+paths:
+  "/v1/ai-ads/videos/{id}":
+    get:
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      summary: Get video
+      description: Fetch a video in its current status
+      security:
+        - ckApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                      - pending
+                      - done
+                      - failed
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+  "/v1/ai-ads/videos":
+    post:
+      summary: Create video
+      description: Receives a payload
+      security:
+        - ckApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                      - pending
+                      - done
+                      - failed
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+      requestBody:
+        description: The details of the scenes to be included in the generated video.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                # - "$ref": '#/components/schemas/video-from-spec'
+                - "$ref": '#/components/schemas/video-from-text'
+                - "$ref": '#/components/schemas/video-from-url'
+              discriminator:
+                propertyName: type
+  
+components:
+  schemas:
+    input-actor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique ID of the actor in the scene.
+        position:
+          type: string
+          nullable: true
+          description: The position of the actor in the scene (only for greenscreenActor).
+        voiceOverrideId:
+          type: string
+          nullable: true
+          description: The ID of the voice to be used for the speech (nullable if not provided).
+      required: [id]
+    video-from-url:
+      type: object
+      description: Payload 1
+      properties:
+        url:
+          type: string
+        actor:
+          "$ref": "#/components/schemas/input-actor"
+      required: [url]
+    video-from-text:
+      type: object
+      description: Payload 2
+      properties:
+        script:
+          type: string
+        actor:
+          "$ref": "#/components/schemas/input-actor"
+      required: [url]
+    video-from-spec:
+      type: object
+      properties:
+        scenes:
+          type: array
+          items:
+            type: object
+            properties:
+              sceneType:
+                type: string
+                enum: [fullscreenActor, greenscreenActor, fullscreenMedia]
+              params:
+                type: object
+                properties:
+                  script:
+                    type: string
+                    description: The script for the actor or scene's speech.
+                  actor:
+                    "$ref": "#/components/schemas/input-actor"
+                  emotion:
+                    type: string
+                    description: The emotion that the actor should express (only for fullscreenActor).
+                  assets:
+                    type: object
+                    properties:
+                      backgroundUrl:
+                        type: string
+                        nullable: true
+                        description: The URL of the background video (only for greenscreenActor and fullscreenMedia).
+                      backgroundContentType:
+                        type: string
+                        nullable: true
+                        description: The content type (MIME type) of the background (only for greenscreenActor and fullscreenMedia).
+  securitySchemes:
+    ckApiKey:
+      type: apiKey
+      name: x-api-key
+      in: header
