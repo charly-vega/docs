@@ -7,6 +7,45 @@ info:
 servers:
   - url: https://api.creatorkit.com
 paths:
+  "/v1/ai-ads/actors":
+    get:
+      summary: Get Actors
+      description: Get the available list of actors for use in video generations.
+      security:
+        - ckApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/model-actor"
+  "/v1/ai-ads/voices":
+    get:
+      summary: Get Voices
+      description: Get the available list of voices for use in video generations.
+      security:
+        - ckApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/model-voice"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    "$ref": "#/components/schemas/response-error"
   "/v1/ai-ads/videos/{id}":
     get:
       parameters:
@@ -25,28 +64,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  status:
-                    type: string
-                    enum:
-                      - pending
-                      - done
-                      - failed
+                "$ref": "#/components/schemas/model-video"
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: object
-                    properties:
-                      message:
-                        type: string
+                "$ref": "#/components/schemas/response-error"
   "/v1/ai-ads/videos":
     post:
       summary: Create Video
@@ -63,16 +87,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  status:
-                    type: string
-                    enum:
-                      - pending
-                      - done
-                      - failed
+                "$ref": "#/components/schemas/model-video"
         '400':
           description: Bad Request
           content:
@@ -81,10 +96,7 @@ paths:
                 type: object
                 properties:
                   error:
-                    type: object
-                    properties:
-                      message:
-                        type: string
+                    "$ref": "#/components/schemas/response-error"
       requestBody:
         description: The details of the scenes to be included in the generated video.
         required: true
@@ -92,9 +104,9 @@ paths:
           application/json:
             schema:
               anyOf:
-                - "$ref": "#/components/schemas/video-from-spec"
-                - "$ref": "#/components/schemas/video-from-text"
-                - "$ref": "#/components/schemas/video-from-url"
+                - "$ref": "#/components/schemas/create-video-fromUrl"
+                - "$ref": "#/components/schemas/create-video-fromText"
+                - "$ref": "#/components/schemas/create-video-fromSpec"
               ## via https://redocly.com/docs/resources/discriminator
               ## but Mintlify doesn't seem to use it
               # discriminator:
@@ -120,15 +132,15 @@ components:
           nullable: true
           description: The ID of the voice to be used for the speech (nullable if not provided).
       required: [id]
-    create-video-requestBody:
+    create-video-base:
       type: object
       required: [type]
-    video-from-url:
+    create-video-fromUrl:
       type: object
       title: "video-from-url"
       description: Create a video by specifying a webpage URL and have CreatorKit write the script for you.
       allOf:
-        - "$ref": "#/components/schemas/create-video-requestBody"
+        - "$ref": "#/components/schemas/create-video-base"
       properties:
         type:
           type: string
@@ -138,12 +150,12 @@ components:
         actor:
           "$ref": "#/components/schemas/input-actor"
       required: [url]
-    video-from-text:
+    create-video-fromText:
       type: object
       title: "video-from-text"
       description: Create a video by specifying a text script and other optional content.
       allOf:
-        - "$ref": "#/components/schemas/create-video-requestBody"
+        - "$ref": "#/components/schemas/create-video-base"
       properties:
         type:
           type: string
@@ -153,12 +165,12 @@ components:
         actor:
           "$ref": "#/components/schemas/input-actor"
       required: [url]
-    video-from-spec:
+    create-video-fromSpec:
       type: object
       title: "video-from-spec"
       description: Create a video by describing the its content as a collection of scenes (advanced).
       allOf:
-        - "$ref": "#/components/schemas/create-video-requestBody"
+        - "$ref": "#/components/schemas/create-video-base"
       properties:
         type:
           type: string
@@ -193,6 +205,50 @@ components:
                         type: string
                         nullable: true
                         description: The content type (MIME type) of the background (only for greenscreenActor and fullscreenMedia).
+    model-video:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - done
+            - failed
+        videoUrlPlain:
+          type: string
+          nullable: true
+        videoUrlSubtitled:
+          type: string
+          nullable: true
+        thumbnailUrl:
+          type: string
+          nullable: true
+    model-actor:
+      type: object
+      properties:
+        id:
+          type: string
+        previewUrl:
+          type: string
+    model-voice:
+      type: object
+      properties:
+        id:
+          type: string
+        previewUrl:
+          type: string
+    response-error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
   securitySchemes:
     ckApiKey:
       type: apiKey

@@ -33,6 +33,11 @@
     "name": "Go to app",
     "url": "https://app.creatorkit.com"
   },
+  "api": {
+    "playground": {
+      "mode": "simple"
+    }
+  },
   "tabs": [
   ],
   "anchors": [
@@ -47,6 +52,8 @@
     {
       "group": "API Reference",
       "pages": [
+        "api-reference/list-actors",
+        "api-reference/list-voices",
         "api-reference/create-video",
         "api-reference/get-video"
       ]
