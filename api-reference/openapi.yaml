@@ -10,7 +10,7 @@ paths:
   "/v1/ai-ads/actors":
     get:
       summary: Get Actors
-      description: Get the available list of actors for use in video generations.
+      # description: Get the available list of actors for use in video generations.
       security:
         - ckApiKey: []
       responses:
@@ -25,7 +25,7 @@ paths:
   "/v1/ai-ads/voices":
     get:
       summary: Get Voices
-      description: Get the available list of voices for use in video generations.
+      # description: Get the available list of voices for use in video generations.
       security:
         - ckApiKey: []
       responses:
@@ -55,7 +55,7 @@ paths:
           schema:
             type: string
       summary: Get Video
-      description: Fetch a video to query its current status and download links.
+      # description: Fetch a video to query its current status and download links.
       security:
         - ckApiKey: []
       responses:
@@ -74,11 +74,11 @@ paths:
   "/v1/ai-ads/videos":
     post:
       summary: Create Video
-      description: |
-        Submit a request to create a UGC-style video. Choose from 3 request formats:
-          - `video-from-url`: provide only a URL and we'll render a complete short video featuring the page's content.
-          - `video-from-text`: provide a text script together with optional content to feature in the final video.
-          - `video-from-spec`: most advanced, describe the entire video as a collection of scenes, with complete control over what actor to use, their voices, and other assets.
+      # description: |
+      #   Submit a request to create a UGC-style video. Choose from 3 request formats:
+      #     - `video-from-url`: provide only a URL and we'll render a complete short video featuring the page's content.
+      #     - `video-from-text`: provide a text script together with optional content to feature in the final video.
+      #     - `video-from-spec`: most advanced, describe the entire video as a collection of scenes, with complete control over what actor to use, their voices, and other assets.
       security:
         - ckApiKey: []
       responses:
