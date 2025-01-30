@@ -1,1 +1,821 @@
-{"openapi":"3.0.3","info":{"title":"My API","description":"Automatically generated OpenAPI spec","version":"v1.0.0"},"components":{"securitySchemes":{"ckApiKey":{"type":"apiKey","in":"header","name":"x-api-key"}},"schemas":{}},"paths":{"/v1/ai-ads/videos/{videoId}":{"get":{"parameters":[{"schema":{"type":"string"},"in":"path","name":"videoId","required":true}],"security":[{"ckApiKey":[]}],"responses":{"200":{"description":"Default Response","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"id":{"type":"string"},"status":{"anyOf":[{"type":"string","enum":["pending"]},{"type":"string","enum":["done"]},{"type":"string","enum":["failed"]}]},"error":{"type":"object","properties":{"message":{"type":"string"},"code":{"type":"string"}},"required":["message"]},"videoUrlPlain":{"type":"string"},"videoUrlSubtitled":{"type":"string"},"thumbnailImageUrl":{"type":"string"},"thumbnailVideoUrl":{"type":"string"},"thumbnailUrl":{"type":"string"}},"required":["id","status"]}},"required":["data"]}}}}}}},"/v1/ai-ads/videos":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"data":{"allOf":[{"type":"object","properties":{"metadata":{"description":"Set of key-value pairs that you can attach to an object. Useful for storing additional information about the video.","type":"object","additionalProperties":{}},"resolution":{"type":"object","properties":{"outputWidth":{"type":"number"},"outputHeight":{"type":"number"}},"required":["outputWidth","outputHeight"]}}},{"anyOf":[{"title":"video-from-url","description":"Create a video by specifying a webpage URL and have CreatorKit write the script for you.","type":"object","properties":{"type":{"type":"string","enum":["video-from-url"]},"actor":{"type":"object","properties":{"id":{"type":"string"},"position":{"anyOf":[{"type":"string","enum":["bottom-left"]},{"type":"string","enum":["bottom-right"]}]},"voiceId":{"description":"Override the actor's voice with another voice ID.","type":"string"}},"required":["id"]},"url":{"type":"string"}},"required":["type","actor","url"]},{"title":"video-from-text","description":"Create a video by specifying a text script.","type":"object","properties":{"type":{"type":"string","enum":["video-from-text"]},"actor":{"type":"object","properties":{"id":{"type":"string"},"position":{"anyOf":[{"type":"string","enum":["bottom-left"]},{"type":"string","enum":["bottom-right"]}]},"voiceId":{"description":"Override the actor's voice with another voice ID.","type":"string"}},"required":["id"]},"text":{"type":"string"}},"required":["type","actor","text"]},{"title":"video-from-spec","description":"Create a video by describing the its content as a collection of scenes (advanced).","type":"object","properties":{"type":{"type":"string","enum":["video-from-spec"]},"scenes":{"type":"array","items":{"anyOf":[{"type":"object","properties":{"type":{"type":"string","enum":["fullscreenMedia"]},"params":{"type":"object","properties":{"speech":{"type":"object","properties":{"type":{"anyOf":[{"type":"string","enum":["text-to-speech"]},{"type":"string","enum":["speech-to-speech"]}]},"script":{"type":"string"},"locale":{"type":"string"},"audioUrl":{"type":"string","nullable":true}},"required":["type","script"]},"actorId":{"type":"string"},"emotion":{"anyOf":[{"type":"string","enum":["DEFAULT"]},{"type":"string","enum":["Happy"]},{"type":"string","enum":["Excited"]},{"type":"string","enum":["Surprised"]},{"type":"string","enum":["Sad"]},{"type":"string","enum":["Frustrated"]},{"type":"string","enum":["Angry"]},{"type":"string","enum":["Skeptical"]}]},"backgroundUrl":{"type":"string"}},"required":["speech"]}},"required":["type","params"]},{"type":"object","properties":{"type":{"type":"string","enum":["greenscreenActor"]},"params":{"type":"object","properties":{"speech":{"type":"object","properties":{"type":{"anyOf":[{"type":"string","enum":["text-to-speech"]},{"type":"string","enum":["speech-to-speech"]}]},"script":{"type":"string"},"locale":{"type":"string"},"audioUrl":{"type":"string","nullable":true}},"required":["type","script"]},"actorId":{"type":"string"},"actorPosition":{"anyOf":[{"type":"string","enum":["bottom-left"]},{"type":"string","enum":["bottom-right"]}]},"emotion":{"anyOf":[{"type":"string","enum":["DEFAULT"]},{"type":"string","enum":["Happy"]},{"type":"string","enum":["Excited"]},{"type":"string","enum":["Surprised"]},{"type":"string","enum":["Sad"]},{"type":"string","enum":["Frustrated"]},{"type":"string","enum":["Angry"]},{"type":"string","enum":["Skeptical"]}]},"backgroundUrl":{"type":"string"}},"required":["speech","actorId"]}},"required":["type","params"]},{"type":"object","properties":{"type":{"type":"string","enum":["fullscreenActor"]},"params":{"type":"object","properties":{"speech":{"type":"object","properties":{"type":{"anyOf":[{"type":"string","enum":["text-to-speech"]},{"type":"string","enum":["speech-to-speech"]}]},"script":{"type":"string"},"locale":{"type":"string"},"audioUrl":{"type":"string","nullable":true}},"required":["type","script"]},"actorId":{"type":"string"},"emotion":{"anyOf":[{"type":"string","enum":["DEFAULT"]},{"type":"string","enum":["Happy"]},{"type":"string","enum":["Excited"]},{"type":"string","enum":["Surprised"]},{"type":"string","enum":["Sad"]},{"type":"string","enum":["Frustrated"]},{"type":"string","enum":["Angry"]},{"type":"string","enum":["Skeptical"]}]},"backgroundUrl":{"type":"string"}},"required":["speech","actorId"]}},"required":["type","params"]}]}}},"required":["type","scenes"]}]}]}},"required":["data"]}}},"required":true},"security":[{"ckApiKey":[]}],"responses":{"200":{"description":"Default Response","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"id":{"type":"string"},"status":{"anyOf":[{"type":"string","enum":["pending"]},{"type":"string","enum":["done"]},{"type":"string","enum":["failed"]}]},"error":{"type":"object","properties":{"message":{"type":"string"},"code":{"type":"string"}},"required":["message"]},"videoUrlPlain":{"type":"string"},"videoUrlSubtitled":{"type":"string"},"thumbnailImageUrl":{"type":"string"},"thumbnailVideoUrl":{"type":"string"},"thumbnailUrl":{"type":"string"}},"required":["id","status"]}},"required":["data"]}}}}}}}},"servers":[{"url":"https://rest.creatorkit.com"}]}
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "My API",
+    "description": "Automatically generated OpenAPI spec",
+    "version": "v1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "ckApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    },
+    "schemas": {}
+  },
+  "paths": {
+    "/v1/ai-ads/videos/{videoId}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "videoId",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "ckApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "processing"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "moderation-pending"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "done"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "failed"
+                              ]
+                            }
+                          ]
+                        },
+                        "error": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "message": {
+                                  "type": "string"
+                                },
+                                "code": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "message"
+                              ]
+                            }
+                          ]
+                        },
+                        "videoUrlPlain": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "videoUrlSubtitled": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "thumbnailImageUrl": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "thumbnailVideoUrl": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ai-ads/videos": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "metadata": {
+                            "description": "Set of key-value pairs that you can attach to an object. Useful for storing additional information about the video.",
+                            "type": "object",
+                            "additionalProperties": {}
+                          },
+                          "resolution": {
+                            "type": "object",
+                            "properties": {
+                              "outputWidth": {
+                                "type": "number"
+                              },
+                              "outputHeight": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "outputWidth",
+                              "outputHeight"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "title": "video-from-url",
+                            "description": "Create a video by specifying a webpage URL and have CreatorKit write the script for you.",
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "video-from-url"
+                                ]
+                              },
+                              "actor": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "bottom-left"
+                                        ]
+                                      },
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "bottom-right"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "voiceId": {
+                                    "description": "Override the actor's voice with another voice ID.",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id"
+                                ]
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "actor",
+                              "url"
+                            ]
+                          },
+                          {
+                            "title": "video-from-text",
+                            "description": "Create a video by specifying a text script.",
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "video-from-text"
+                                ]
+                              },
+                              "actor": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "bottom-left"
+                                        ]
+                                      },
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "bottom-right"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "voiceId": {
+                                    "description": "Override the actor's voice with another voice ID.",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id"
+                                ]
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "actor",
+                              "text"
+                            ]
+                          },
+                          {
+                            "title": "video-from-spec",
+                            "description": "Create a video by describing the its content as a collection of scenes (advanced).",
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "video-from-spec"
+                                ]
+                              },
+                              "scenes": {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "fullscreenMedia"
+                                          ]
+                                        },
+                                        "params": {
+                                          "type": "object",
+                                          "properties": {
+                                            "speech": {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "anyOf": [
+                                                    {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "text-to-speech"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "speech-to-speech"
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                "script": {
+                                                  "type": "string"
+                                                },
+                                                "locale": {
+                                                  "type": "string"
+                                                },
+                                                "audioUrl": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              },
+                                              "required": [
+                                                "type",
+                                                "script"
+                                              ]
+                                            },
+                                            "actorId": {
+                                              "type": "string"
+                                            },
+                                            "emotion": {
+                                              "anyOf": [
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "DEFAULT"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Happy"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Excited"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Surprised"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Sad"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Frustrated"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Angry"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Skeptical"
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            "backgroundUrl": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "speech"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "params"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "greenscreenActor"
+                                          ]
+                                        },
+                                        "params": {
+                                          "type": "object",
+                                          "properties": {
+                                            "speech": {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "anyOf": [
+                                                    {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "text-to-speech"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "speech-to-speech"
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                "script": {
+                                                  "type": "string"
+                                                },
+                                                "locale": {
+                                                  "type": "string"
+                                                },
+                                                "audioUrl": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              },
+                                              "required": [
+                                                "type",
+                                                "script"
+                                              ]
+                                            },
+                                            "actorId": {
+                                              "type": "string"
+                                            },
+                                            "actorPosition": {
+                                              "anyOf": [
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "bottom-left"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "bottom-right"
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            "emotion": {
+                                              "anyOf": [
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "DEFAULT"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Happy"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Excited"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Surprised"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Sad"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Frustrated"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Angry"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Skeptical"
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            "backgroundUrl": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "speech",
+                                            "actorId"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "params"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "fullscreenActor"
+                                          ]
+                                        },
+                                        "params": {
+                                          "type": "object",
+                                          "properties": {
+                                            "speech": {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "anyOf": [
+                                                    {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "text-to-speech"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "speech-to-speech"
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                "script": {
+                                                  "type": "string"
+                                                },
+                                                "locale": {
+                                                  "type": "string"
+                                                },
+                                                "audioUrl": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              },
+                                              "required": [
+                                                "type",
+                                                "script"
+                                              ]
+                                            },
+                                            "actorId": {
+                                              "type": "string"
+                                            },
+                                            "emotion": {
+                                              "anyOf": [
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "DEFAULT"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Happy"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Excited"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Surprised"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Sad"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Frustrated"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Angry"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Skeptical"
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            "backgroundUrl": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "speech",
+                                            "actorId"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "params"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "scenes"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "ckApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "processing"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "moderation-pending"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "done"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "failed"
+                              ]
+                            }
+                          ]
+                        },
+                        "error": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "message": {
+                                  "type": "string"
+                                },
+                                "code": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "message"
+                              ]
+                            }
+                          ]
+                        },
+                        "videoUrlPlain": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "videoUrlSubtitled": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "thumbnailImageUrl": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "thumbnailVideoUrl": {
+                          "default": null,
+                          "nullable": true,
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://rest.creatorkit.com"
+    }
+  ]
+}
