@@ -76,60 +76,32 @@
                           ]
                         },
                         "error": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "message": {
-                                  "type": "string"
-                                },
-                                "code": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "message"
-                              ]
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            },
+                            "code": {
+                              "type": "string"
                             }
-                          ]
+                          },
+                          "required": [
+                            "message"
+                          ],
+                          "nullable": true
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "nullable": true,
+                          "additionalProperties": {}
                         },
                         "videoUrlPlain": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
+                          "type": "string",
+                          "nullable": true
                         },
                         "videoUrlSubtitled": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "thumbnailImageUrl": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "thumbnailVideoUrl": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
+                          "type": "string",
+                          "nullable": true
                         }
                       },
                       "required": [
@@ -355,55 +327,17 @@
                                               "type": "string"
                                             },
                                             "emotion": {
-                                              "anyOf": [
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "DEFAULT"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Happy"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Excited"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Surprised"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Sad"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Frustrated"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Angry"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Skeptical"
-                                                  ]
-                                                }
+                                              "type": "string",
+                                              "nullable": true,
+                                              "enum": [
+                                                "DEFAULT",
+                                                "Happy",
+                                                "Excited",
+                                                "Surprised",
+                                                "Sad",
+                                                "Frustrated",
+                                                "Angry",
+                                                "Skeptical"
                                               ]
                                             },
                                             "backgroundUrl": {
@@ -487,55 +421,17 @@
                                               ]
                                             },
                                             "emotion": {
-                                              "anyOf": [
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "DEFAULT"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Happy"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Excited"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Surprised"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Sad"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Frustrated"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Angry"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Skeptical"
-                                                  ]
-                                                }
+                                              "type": "string",
+                                              "nullable": true,
+                                              "enum": [
+                                                "DEFAULT",
+                                                "Happy",
+                                                "Excited",
+                                                "Surprised",
+                                                "Sad",
+                                                "Frustrated",
+                                                "Angry",
+                                                "Skeptical"
                                               ]
                                             },
                                             "backgroundUrl": {
@@ -604,55 +500,17 @@
                                               "type": "string"
                                             },
                                             "emotion": {
-                                              "anyOf": [
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "DEFAULT"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Happy"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Excited"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Surprised"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Sad"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Frustrated"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Angry"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "string",
-                                                  "enum": [
-                                                    "Skeptical"
-                                                  ]
-                                                }
+                                              "type": "string",
+                                              "nullable": true,
+                                              "enum": [
+                                                "DEFAULT",
+                                                "Happy",
+                                                "Excited",
+                                                "Surprised",
+                                                "Sad",
+                                                "Frustrated",
+                                                "Angry",
+                                                "Skeptical"
                                               ]
                                             },
                                             "backgroundUrl": {
@@ -740,60 +598,32 @@
                           ]
                         },
                         "error": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "message": {
-                                  "type": "string"
-                                },
-                                "code": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "message"
-                              ]
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            },
+                            "code": {
+                              "type": "string"
                             }
-                          ]
+                          },
+                          "required": [
+                            "message"
+                          ],
+                          "nullable": true
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "nullable": true,
+                          "additionalProperties": {}
                         },
                         "videoUrlPlain": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
+                          "type": "string",
+                          "nullable": true
                         },
                         "videoUrlSubtitled": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "thumbnailImageUrl": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "thumbnailVideoUrl": {
-                          "default": null,
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            }
-                          ]
+                          "type": "string",
+                          "nullable": true
                         }
                       },
                       "required": [
@@ -808,6 +638,15 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/_glue/creatorkit-server/actors-catalog": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Default Response"
           }
         }
       }
